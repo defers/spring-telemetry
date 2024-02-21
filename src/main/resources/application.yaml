@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: spring-telemetry
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+#logging:
+#  pattern:
+#    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
+tracing:
+  url: http://localhost:4318/v1/traces
+app:
+  remote-api:
+    url: http://localhost:8090
