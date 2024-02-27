@@ -1,6 +1,7 @@
 package com.defers.springtelemetry.infra.kafka;
 
 import com.defers.springtelemetry.domain.user.port.out.TopicMessageSender;
+import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -22,7 +23,7 @@ public class KafkaMessageSender implements TopicMessageSender {
     @Override
     public <T> void send(T msg) {
         log.info("Sending message: {} to kafka topic: {}", msg, topic);
-        var result = kafkaTemplate.send(topic, msg);
+        var result = kafkaTemplate.send(topic, UUID.randomUUID().toString(), msg);
         result.whenComplete((objectObjectSendResult, throwable) -> {
             if (throwable == null) {
                 log.info(

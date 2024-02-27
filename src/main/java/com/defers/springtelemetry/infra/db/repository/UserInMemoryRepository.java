@@ -5,12 +5,11 @@ import com.defers.springtelemetry.domain.user.port.out.UserRepository;
 import com.defers.springtelemetry.infra.db.exception.ElementNotFoundException;
 import com.defers.springtelemetry.infra.db.model.UserModel;
 import io.micrometer.observation.annotation.Observed;
-import org.springframework.core.convert.ConversionService;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.springframework.core.convert.ConversionService;
 
 public class UserInMemoryRepository implements UserRepository {
     private final Map<Integer, UserModel> users = new HashMap<>();
@@ -25,7 +24,8 @@ public class UserInMemoryRepository implements UserRepository {
         users.put(user.getId(), user);
     }
 
-    @Observed(name = "find.all.users.repo",
+    @Observed(
+            name = "find.all.users.repo",
             contextualName = "find-all-users-repo",
             lowCardinalityKeyValues = {"users1", "users2"})
     @Override

@@ -15,6 +15,15 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      client-id: ${spring.application.name}
+    consumer:
+      bootstrap-servers: localhost:29092
+      autoOffsetReset: earliest
+      group-id: ${spring.application.name}
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "com.defers.springtelemetry.*"
 management:
   tracing:
     sampling:
@@ -23,7 +32,8 @@ management:
 #  pattern:
 #    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
 tracing:
-  url: http://localhost:4318/v1/traces
+#  url: http://localhost:4318/v1/traces #Jaeger endpoint
+  url: http://localhost:4318/v1/traces #Tempo endpoint
 app:
   remote-api:
     url: http://localhost:8090
