@@ -1,6 +1,5 @@
 package com.defers.springtelemetry.domain.user.model;
 
-
 import com.defers.springtelemetry.domain.user.exception.EntityValidationException;
 
 public class User {

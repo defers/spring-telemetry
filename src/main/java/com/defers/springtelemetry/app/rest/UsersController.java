@@ -4,11 +4,10 @@ import com.defers.springtelemetry.domain.user.model.User;
 import com.defers.springtelemetry.domain.user.port.in.UserUseCase;
 import com.defers.springtelemetry.infra.rest.ServiceRestConnector;
 import io.micrometer.observation.annotation.Observed;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RequestMapping("/users")
 @RestController
@@ -34,7 +33,8 @@ public class UsersController {
         return serviceRestConnector.getAll();
     }
 
-    @Observed(name = "find.users.proxy.service",
+    @Observed(
+            name = "find.users.proxy.service",
             contextualName = "find-users-proxy.service",
             lowCardinalityKeyValues = {"users1", "users2"})
     @GetMapping("/proxy-camel")
@@ -45,8 +45,21 @@ public class UsersController {
 
     @PostMapping
     public User create(@RequestBody User user) {
-        log.info("Request to create, with body: %s".formatted(user));
+        log.info("Request to create, with body: {}", user);
         return userUseCase.create(user);
     }
 
+    @PostMapping("/jms")
+    public User createWithJms(@RequestBody User user) throws InterruptedException {
+        log.info("Request to create with JMS, with body: {}", user);
+        Thread.sleep(500);
+        return userUseCase.createWithJms(user);
+    }
+
+    @PostMapping("/kafka")
+    public User createWithKafka(@RequestBody User user) throws InterruptedException {
+        log.info("Request to create with Kafka, with body: {}", user);
+        Thread.sleep(500);
+        return userUseCase.createWithKafka(user);
+    }
 }

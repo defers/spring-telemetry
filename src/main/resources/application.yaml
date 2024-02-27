@@ -1,6 +1,20 @@
 spring:
   application:
     name: spring-telemetry
+  jms:
+    listener:
+      max-concurrency: ${NUMBER_OF_CONSUMERS:5}
+      min-concurrency: 1
+  activemq:
+    password: ${AMQ_PASSWORD:admin}
+    user: ${AMQ_USER:admin}
+    broker-url: ${AMQ_ADDRESS:tcp://localhost:61616}
+    non-blocking-redelivery: true
+  kafka:
+    bootstrap-servers: localhost:29092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 management:
   tracing:
     sampling:
@@ -13,3 +27,14 @@ tracing:
 app:
   remote-api:
     url: http://localhost:8090
+  jms:
+    queues:
+      inbound: "user.in"
+    redelivery:
+      initial-redelivery-delay: 5000
+      backoff-multiplier: 1.5
+      maximum-redeliveries: -1
+      maximum-redelivery-delay: 30000
+  kafka:
+    topics:
+      inbound: "USER_IN"

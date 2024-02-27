@@ -1,7 +1,6 @@
 package com.defers.springtelemetry.domain.user.port.out;
 
 import com.defers.springtelemetry.domain.user.model.User;
-
 import java.util.List;
 
 public interface UserRepository {
