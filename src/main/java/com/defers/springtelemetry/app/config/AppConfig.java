@@ -8,7 +8,6 @@ import com.defers.springtelemetry.domain.user.usecase.UserService;
 import com.defers.springtelemetry.infra.rest.UserRestApi;
 import io.micrometer.observation.ObservationRegistry;
 import io.micrometer.observation.aop.ObservedAspect;
-import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
@@ -35,10 +34,10 @@ public class AppConfig {
         return new ModelMapper();
     }
 
-    @Bean
-    public OtlpHttpSpanExporter otlpHttpSpanExporter(@Value("${tracing.url}") String url) {
-        return OtlpHttpSpanExporter.builder().setEndpoint(url).build();
-    }
+    //    @Bean
+    //    public OtlpHttpSpanExporter otlpHttpSpanExporter(@Value("${tracing.url}") String url) {
+    //        return OtlpHttpSpanExporter.builder().setEndpoint(url).build();
+    //    }
 
     @Bean
     public WebClient webClient(@Value("${app.remote-api.url}") String url, WebClient.Builder builder) {

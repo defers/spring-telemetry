@@ -32,7 +32,6 @@ management:
 #  pattern:
 #    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
 tracing:
-#  url: http://localhost:4318/v1/traces #Jaeger endpoint
   url: http://localhost:4318/v1/traces #Tempo endpoint
 app:
   remote-api:
@@ -48,3 +47,34 @@ app:
   kafka:
     topics:
       inbound: "USER_IN"
+#{If using  opentelemetry-spring-boot-starter
+#otel:
+#  resource:
+#    attributes:
+#      environment: dev
+#      namespace: foo
+#      service.name: ESB-${spring.application.name}
+#  sdk:
+#    disabled: false
+#  traces:
+#    sampler:
+#      probability: 1.0
+#  exporter:
+#    otlp:
+#      traces:
+#        endpoint: ${tracing.url}
+#        protocol: http/protobuf
+#      logs:
+#        endpoint: none
+#      metrics:
+#        endpoint:
+#  instrumentation:
+#    logback-appender:
+#      enabled: true
+#      experimental:
+#        capture-mdc-attributes: true
+#  logs:
+#    exporter: none
+#  metrics:
+#    exporter: none
+#If using  opentelemetry-spring-boot-starter}

@@ -5,6 +5,8 @@ import com.defers.springtelemetry.domain.user.port.in.UserUseCase;
 import com.defers.springtelemetry.domain.user.port.out.QueueMessageSender;
 import com.defers.springtelemetry.domain.user.port.out.TopicMessageSender;
 import com.defers.springtelemetry.domain.user.port.out.UserRepository;
+import io.opentelemetry.instrumentation.annotations.SpanAttribute;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,8 +53,9 @@ public class UserService implements UserUseCase {
         return userRepository.deleteById(id);
     }
 
+    @WithSpan
     @Override
-    public User createWithJms(User user) {
+    public User createWithJms(@SpanAttribute User user) {
         try {
             Thread.sleep(400);
         } catch (InterruptedException e) {

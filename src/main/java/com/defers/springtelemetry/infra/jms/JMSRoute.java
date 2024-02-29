@@ -18,7 +18,10 @@ public class JMSRoute {
     }
 
     @JmsListener(destination = "${app.jms.queues.inbound}")
-    public void consume(User user, @Header("typeId") String typeId, @Header("traceparent") String traceParentId)
+    public void consume(
+            User user,
+            @Header("typeId") String typeId,
+            @Header(value = "traceparent", required = false) String traceParentId)
             throws InterruptedException {
         log.info(
                 "Consumed message from queue, body: {}, header typeId: {}, header traceParentId: {}",
