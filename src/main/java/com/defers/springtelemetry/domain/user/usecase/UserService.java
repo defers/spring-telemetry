@@ -56,11 +56,6 @@ public class UserService implements UserUseCase {
     @WithSpan
     @Override
     public User createWithJms(@SpanAttribute User user) {
-        try {
-            Thread.sleep(400);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         queueMessageSender.send(user);
         return user;
     }

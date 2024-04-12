@@ -34,7 +34,8 @@ services:
     image: grafana/tempo:latest
     command: [ "-config.file=/etc/tempo.yml" ]
     volumes:
-      - ./docker/tempo/tempo.yml:/etc/tempo.yml
+      - ./docker/tempo/tempo-test.yml:/etc/tempo.yml
+      - ./tempo-data:/tmp/tempo
     restart: always
     ports:
       - "14268:14268"  # jaeger ingest
@@ -45,7 +46,7 @@ services:
       - "9411:9411"   # zipkin
   grafana:
     container_name: grafana
-    image: grafana/grafana:10.0.5
+    image: grafana/grafana:latest
     volumes:
       - ./docker/grafana/grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
     environment:
@@ -58,3 +59,13 @@ services:
       - "3000:3000"
     depends_on:
       - tempo
+  prometheus:
+    image: prom/prometheus:latest
+    command:
+      - --config.file=/etc/prometheus.yaml
+      - --web.enable-remote-write-receiver
+      - --enable-feature=exemplar-storage
+    volumes:
+      - ./docker/prometheus/prometheus.yaml:/etc/prometheus.yaml
+    ports:
+      - "9090:9090"

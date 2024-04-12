@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <springProfile name="local">
-        <property name="LOG_CORRELATION_PATTERN" value="${LOG_CORRELATION_PATTERN:-} [trace=%X{trace_id} span=%X{span_id}] "/>
-        <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
         <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
     </springProfile>
+<!--    <springProfile name="local">-->
+<!--        <property name="LOG_CORRELATION_PATTERN" value="${LOG_CORRELATION_PATTERN:-} [trace=%X{trace_id} span=%X{span_id}] "/>-->
+<!--        <include resource="org/springframework/boot/logging/logback/defaults.xml"/>-->
+<!--        <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>-->
+<!--    </springProfile>-->
     <!-- Just wrap your logging appender, for example ConsoleAppender, with OpenTelemetryAppender -->
-    <appender name="OTEL" class="io.opentelemetry.instrumentation.logback.mdc.v1_0.OpenTelemetryAppender">
-        <appender-ref ref="CONSOLE"/>
-    </appender>
+<!--    <appender name="OTEL" class="io.opentelemetry.instrumentation.logback.mdc.v1_0.OpenTelemetryAppender">-->
+<!--        <appender-ref ref="CONSOLE"/>-->
+<!--    </appender>-->
     <springProfile name="!local">
         <springProperty name="APP_NAME" source="spring.application.name"/>
         <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
@@ -21,6 +25,9 @@
         </appender>
     </springProfile>
     <root level="INFO">
-        <appender-ref ref="OTEL"/>
+        <appender-ref ref="CONSOLE"/>
     </root>
+<!--    <root level="INFO">-->
+<!--        <appender-ref ref="OTEL"/>-->
+<!--    </root>-->
 </configuration>

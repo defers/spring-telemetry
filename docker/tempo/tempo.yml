@@ -10,6 +10,11 @@ distributor:
         http:
         grpc:
 
+query_frontend:
+  metrics:
+    concurrent_jobs: 8
+    target_bytes_per_job: 1.25e+09 # ~1.25GB
+
 ingester:
   max_block_duration: 5m               # cut the headblock when this much time passes. this is being set for demo purposes and should probably be left alone normally
 
@@ -17,17 +22,45 @@ compactor:
   compaction:
     block_retention: 1h                # overall Tempo trace retention. set for demo purposes
 
-#metrics_generator:
-#  registry:
-#    external_labels:
-#      source: tempo
-#      cluster: docker-compose
-#  storage:
-#    path: /tmp/tempo/generator/wal
-#    remote_write:
-#      - url: http://prometheus:9090/api/v1/write
-#        send_exemplars: true
-
+metrics_generator:
+#  processor:
+#    service_graphs:
+#      enable_client_server_prefix: true
+#    span_metrics:
+#      # Configure intrinsic dimensions to add to the metrics. Intrinsic dimensions are taken
+#      # directly from the respective resource and span properties.
+#      intrinsic_dimensions:
+#        # Whether to add the name of the service the span is associated with.
+#        service: true
+#        # Whether to add the name of the span.
+#        span_name: true
+#        # Whether to add the span kind describing the relationship between spans.
+#        span_kind: true
+#        # Whether to add the span status code.
+#        status_code: true
+#      # Enable traces_target_info metrics
+#      enable_target_info: true
+  registry:
+    external_labels:
+      source: tempo
+      cluster: docker-compose
+  processor:
+    service_graphs:
+    span_metrics:
+      enable_target_info: true
+    local_blocks:
+      filter_server_spans: false
+  traces_storage:
+    path: /tmp/tempo/generator/traces
+  storage:
+    path: /tmp/tempo/generator/wal
+    remote_write:
+      - url: http://prometheus:9090/api/v1/write
+        send_exemplars: true
+overrides:
+  defaults:
+    metrics_generator:
+      processors: [service-graphs, span-metrics, local_blocks]
 storage:
   trace:
     backend: local                     # backend configuration to use
@@ -36,5 +69,3 @@ storage:
     local:
       path: /tmp/tempo/blocks
 
-#overrides:
-#  metrics_generator_processors: [service-graphs, span-metrics] # enables metrics generator

@@ -21,14 +21,12 @@ public class JMSRoute {
     public void consume(
             User user,
             @Header("typeId") String typeId,
-            @Header(value = "traceparent", required = false) String traceParentId)
-            throws InterruptedException {
+            @Header(value = "traceparent", required = false) String traceParentId) {
         log.info(
                 "Consumed message from queue, body: {}, header typeId: {}, header traceParentId: {}",
                 user,
                 typeId,
                 traceParentId);
-        Thread.sleep(1000);
         serviceRestConnector.create(user);
     }
 }

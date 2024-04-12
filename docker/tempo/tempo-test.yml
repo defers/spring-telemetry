@@ -1,0 +1,39 @@
+# based on https://github.com/grafana/tempo/blob/main/example/docker-compose/shared/tempo.yaml
+server:
+  http_listen_port: 3200
+
+distributor:
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+          endpoint: "0.0.0.0:4317"
+        http:
+          endpoint: "0.0.0.0:4318"
+
+metrics_generator:
+  registry:
+    external_labels:
+      source: tempo
+  processor:
+    span_metrics:
+      dimensions: ['correlation_id', 'start_time_ms', 'end_time_ms']
+  traces_storage:
+    path: /tmp/tempo/generator/traces
+  storage:
+    path: /tmp/tempo/generator/wal
+    remote_write:
+      - url: http://prometheus:9090/api/v1/write
+        name: prometheus_remote_write_tempo
+        send_exemplars: true
+
+storage:
+  trace:
+    backend: local                     # backend configuration to use
+    wal:
+      path: /tmp/tempo/wal             # where to store the the wal locally
+    local:
+      path: /tmp/tempo/traces
+
+overrides:
+  metrics_generator_processors: [ 'local-blocks', service-graphs, span-metrics ]

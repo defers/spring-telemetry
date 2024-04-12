@@ -57,16 +57,14 @@ public class UsersController {
     }
 
     @PostMapping("/jms")
-    public User createWithJms(@RequestBody User user) throws InterruptedException {
+    public User createWithJms(@RequestBody User user) {
         log.info("Request to create with JMS, with body: {}", user);
-        Thread.sleep(500);
         return userUseCase.createWithJms(user);
     }
 
     @PostMapping("/kafka")
-    public User createWithKafka(@RequestBody User user) throws InterruptedException {
+    public User createWithKafka(@RequestBody User user) {
         log.info("Request to create with Kafka, with body: {}", user);
-        Thread.sleep(500);
         return userUseCase.createWithKafka(user);
     }
 
